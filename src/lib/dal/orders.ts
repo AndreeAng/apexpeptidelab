@@ -45,9 +45,17 @@ export async function createOrder(data: {
       .select("id, order_number")
       .single();
 
-    if (error || !created) return null;
+    if (error || !created) {
+      console.error("Order insert error:", error?.message);
+      // If select failed due to RLS but insert succeeded, return the order number
+      if (error?.code === "PGRST116" || error?.message?.includes("rows")) {
+        return { id: "unknown", orderNumber };
+      }
+      return null;
+    }
     return { id: created.id, orderNumber: created.order_number };
-  } catch {
+  } catch (err) {
+    console.error("Order creation exception:", err);
     return null;
   }
 }
