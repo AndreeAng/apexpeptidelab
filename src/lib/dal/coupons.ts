@@ -134,27 +134,35 @@ export async function toggleCouponActive(
   }
 }
 
-/** Increment used_count for a coupon (called after a successful order). */
+/** Increment used_count atomically for a coupon (called after a successful order). */
 export async function incrementCouponUsage(code: string): Promise<boolean> {
   try {
     const supabase = await createClient();
 
-    // 1. Fetch coupon by code
-    const { data: coupon, error: fetchError } = await supabase
-      .from("coupons")
-      .select("id, used_count")
-      .eq("code", code)
-      .single();
+    // Atomic increment using RPC to avoid race conditions
+    const { error } = await supabase.rpc("increment_coupon_usage", {
+      coupon_code: code.toUpperCase().trim(),
+    });
 
-    if (fetchError || !coupon) return false;
+    // Fallback to manual increment if RPC doesn't exist
+    if (error) {
+      const { data: coupon } = await supabase
+        .from("coupons")
+        .select("id, used_count")
+        .eq("code", code.toUpperCase().trim())
+        .single();
 
-    // 2. Update used_count = used_count + 1
-    const { error: updateError } = await supabase
-      .from("coupons")
-      .update({ used_count: coupon.used_count + 1 })
-      .eq("id", coupon.id);
+      if (!coupon) return false;
 
-    return !updateError;
+      const { error: updateError } = await supabase
+        .from("coupons")
+        .update({ used_count: coupon.used_count + 1 })
+        .eq("id", coupon.id);
+
+      return !updateError;
+    }
+
+    return true;
   } catch {
     return false;
   }

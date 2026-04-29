@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { adminLoginAction } from "./actions";
 import { Lock, Mail, AlertCircle, Loader2 } from "lucide-react";
 
@@ -9,6 +10,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -16,7 +18,9 @@ export default function AdminLoginPage() {
 
     startTransition(async () => {
       const result = await adminLoginAction({ email, password });
-      if (result && !result.ok) {
+      if (result?.ok) {
+        router.push(result.redirect);
+      } else if (result) {
         setError(result.error);
       }
     });

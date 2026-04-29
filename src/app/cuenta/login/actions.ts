@@ -20,5 +20,5 @@ export async function loginAction(formData: {
 
   if (error) return { ok: false as const, error: "Email o contraseña incorrectos" };
 
-  redirect("/cuenta");
+  return { ok: true as const, redirect: "/cuenta" };
 }

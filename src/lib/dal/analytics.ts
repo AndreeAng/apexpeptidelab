@@ -188,7 +188,7 @@ export async function getOrdersByDateRange(
       .from("orders")
       .select("*")
       .gte("created_at", `${from}T00:00:00`)
-      .lte("created_at", `${to}T23:59:59`)
+      .lte("created_at", `${to}T23:59:59.999`)
       .order("created_at", { ascending: false });
 
     if (error || !data) return [];

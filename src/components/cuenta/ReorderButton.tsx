@@ -63,6 +63,8 @@ export function ReorderButton({ items }: ReorderButtonProps) {
 
       if (added > 0) {
         router.push("/checkout");
+      } else {
+        alert("Los productos de este pedido ya no están disponibles.");
       }
     } finally {
       setLoading(false);

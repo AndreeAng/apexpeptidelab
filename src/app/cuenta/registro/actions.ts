@@ -60,5 +60,10 @@ export async function registerAction(formData: {
       .is("user_id", null);
   }
 
-  redirect("/cuenta");
+  // Check if email confirmation is required (no active session)
+  if (!data.session) {
+    return { ok: true as const, requiresConfirmation: true };
+  }
+
+  return { ok: true as const, redirect: "/cuenta" };
 }

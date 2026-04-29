@@ -14,7 +14,7 @@ type Props = {
 export function ProductImage({ product, size = 280, className }: Props) {
   const [errored, setErrored] = useState(false);
 
-  if (errored) {
+  if (!product.image || errored) {
     return (
       <div
         className={`flex flex-col items-center justify-center gap-4 ${className || ""}`}

@@ -17,7 +17,7 @@ export function ProductCard({ product }: { product: Product }) {
       <Link href={`/productos/${product.slug}`} className="block cursor-pointer">
         {/* Product image */}
         <div className="relative aspect-square bg-navy-deep overflow-hidden">
-          {!imgError ? (
+          {product.image && !imgError ? (
             <Image
               src={product.image}
               alt={product.name}

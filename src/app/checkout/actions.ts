@@ -1,6 +1,7 @@
 "use server";
 
 import { createOrder } from "@/lib/dal/orders";
+import { incrementCouponUsage } from "@/lib/dal/coupons";
 import type { OrderItem } from "@/lib/supabase/types";
 import { createClient } from "@/lib/supabase/server";
 import { sendAdminNewOrderEmail, sendCustomerConfirmationEmail } from "@/lib/email";
@@ -19,14 +20,30 @@ export async function createOrderAction(formData: {
   discount: number;
   total: number;
 }) {
-  // Rate limit: max 5 orders per 10 minutes
-  const rl = rateLimit("checkout", 5, 10 * 60 * 1000);
+  // Rate limit per phone number
+  const rl = rateLimit(`checkout:${formData.whatsapp}`, 5, 10 * 60 * 1000);
   if (!rl.ok) return { ok: false as const, error: "Demasiados pedidos. Intenta en unos minutos." };
 
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Re-validate coupon server-side and recompute discount/total
+  let discount = 0;
+  let total = formData.subtotal;
+
+  if (formData.couponCode) {
+    const couponResult = await validateCouponAction(
+      formData.couponCode,
+      formData.subtotal,
+    );
+    if (couponResult.ok) {
+      discount = couponResult.discount;
+      total = Math.max(0, formData.subtotal - discount);
+    }
+    // If coupon is no longer valid, proceed without discount
+  }
 
   const result = await createOrder({
     userId: user?.id,
@@ -37,14 +54,19 @@ export async function createOrderAction(formData: {
     notes: formData.notas,
     items: formData.items,
     subtotal: formData.subtotal,
-    discount: formData.discount,
-    couponCode: formData.couponCode,
-    total: formData.total,
+    discount,
+    couponCode: discount > 0 ? formData.couponCode : undefined,
+    total,
   });
 
   if (!result) return { ok: false as const, error: "Error al crear la orden" };
 
-  // Send email notifications (fire-and-forget, don't block checkout)
+  // Increment coupon usage after successful order
+  if (formData.couponCode && discount > 0) {
+    incrementCouponUsage(formData.couponCode).catch(() => {});
+  }
+
+  // Send email notifications (fire-and-forget)
   const emailData = {
     orderNumber: result.orderNumber,
     customerName: `${formData.nombre} ${formData.apellido}`,
@@ -53,15 +75,13 @@ export async function createOrderAction(formData: {
     customerAddress: formData.direccion,
     items: formData.items,
     subtotal: formData.subtotal,
-    discount: formData.discount,
+    discount,
     couponCode: formData.couponCode,
-    total: formData.total,
+    total,
   };
 
-  // Admin notification
   sendAdminNewOrderEmail(emailData).catch(() => {});
 
-  // Customer confirmation (only if logged in with email)
   if (user?.email) {
     sendCustomerConfirmationEmail(user.email, emailData).catch(() => {});
   }
@@ -88,17 +108,14 @@ export async function validateCouponAction(code: string, subtotal: number) {
       return { ok: false as const, error: "Cupón no encontrado o inválido" };
     }
 
-    // Check expiration
     if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) {
       return { ok: false as const, error: "Este cupón ha expirado" };
     }
 
-    // Check usage limit
     if (coupon.max_uses !== null && coupon.used_count >= coupon.max_uses) {
       return { ok: false as const, error: "Este cupón ya alcanzó su límite de uso" };
     }
 
-    // Check minimum order
     if (coupon.min_order !== null && subtotal < coupon.min_order) {
       return {
         ok: false as const,
@@ -106,12 +123,12 @@ export async function validateCouponAction(code: string, subtotal: number) {
       };
     }
 
-    // Calculate discount
     let discount: number;
     if (coupon.type === "percentage") {
       discount = Math.round((subtotal * coupon.value) / 100 * 100) / 100;
     } else {
-      discount = coupon.value;
+      // Cap fixed discount to subtotal to prevent negative totals
+      discount = Math.min(coupon.value, subtotal);
     }
 
     return {

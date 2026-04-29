@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { registerAction } from "./actions";
-import { Mail, Lock, User, Phone, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, User, Phone, AlertCircle, Loader2, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function RegistroPage() {
@@ -12,7 +13,9 @@ export default function RegistroPage() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [confirmEmail, setConfirmEmail] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,10 +23,35 @@ export default function RegistroPage() {
 
     startTransition(async () => {
       const result = await registerAction({ email, password, name, lastName, phone });
-      if (result && !result.ok) {
+      if (result?.ok) {
+        if ("requiresConfirmation" in result && result.requiresConfirmation) {
+          setConfirmEmail(true);
+        } else if ("redirect" in result && result.redirect) {
+          router.push(result.redirect);
+        }
+      } else if (result) {
         setError(result.error);
       }
     });
+  }
+
+  if (confirmEmail) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-sm text-center">
+          <div className="w-14 h-14 rounded-full bg-lime/20 flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-7 h-7 text-lime" />
+          </div>
+          <h2 className="text-xl font-semibold text-white mb-2">Revisa tu email</h2>
+          <p className="text-white/50 text-sm mb-6">
+            Te enviamos un enlace de confirmación a <span className="text-white">{email}</span>. Haz click en el enlace para activar tu cuenta.
+          </p>
+          <Link href="/cuenta/login" className="text-lime text-sm hover:underline">
+            Ir a iniciar sesión
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (

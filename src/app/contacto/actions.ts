@@ -14,12 +14,12 @@ const schema = z.object({
 });
 
 export async function sendContactMessage(formData: FormData) {
-  // Rate limit: max 3 contact messages per 10 minutes
-  const rl = rateLimit("contact", 3, 10 * 60 * 1000);
-  if (!rl.ok) return { ok: false, error: "Demasiados mensajes. Intenta en unos minutos." };
-
   const data = schema.safeParse(Object.fromEntries(formData));
   if (!data.success) return { ok: false, error: "Datos inválidos" };
+
+  // Rate limit per email: max 3 contact messages per 10 minutes
+  const rl = rateLimit(`contact:${data.data.email}`, 3, 10 * 60 * 1000);
+  if (!rl.ok) return { ok: false, error: "Demasiados mensajes. Intenta en unos minutos." };
 
   const { nombre, apellido, email, whatsapp, asunto, mensaje } = data.data;
   const asuntoLabels: Record<string, string> = {

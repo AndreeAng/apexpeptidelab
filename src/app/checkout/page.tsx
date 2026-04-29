@@ -95,7 +95,7 @@ export default function CheckoutPage() {
   }, [setValue]);
 
   const discount = appliedCoupon?.discount ?? 0;
-  const total = subtotal() - discount;
+  const total = Math.max(0, subtotal() - discount);
 
   const handleApplyCoupon = useCallback(async () => {
     if (!couponCode.trim()) return;

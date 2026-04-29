@@ -38,5 +38,5 @@ export async function adminLoginAction(formData: {
     return { ok: false as const, error: "No tienes permisos de administrador" };
   }
 
-  redirect("/admin");
+  return { ok: true as const, redirect: "/admin" };
 }
