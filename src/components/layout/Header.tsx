@@ -23,6 +23,7 @@ export function Header() {
 
   const navLinks = [
     { href: "/productos", label: "Productos" },
+    { href: "/blog", label: "Blog" },
     { href: "/investigacion", label: "Investigación" },
     { href: "/calidad", label: "Calidad" },
     { href: "/contacto", label: "Contacto" },

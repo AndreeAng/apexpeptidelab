@@ -38,6 +38,8 @@ export function ProductImage({ product, size = 280, className }: Props) {
         alt={product.name}
         width={size}
         height={size}
+        sizes="(max-width: 768px) 100vw, 50vw"
+        quality={85}
         onError={() => setErrored(true)}
         className="object-contain"
       />

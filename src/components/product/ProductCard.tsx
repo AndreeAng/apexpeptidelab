@@ -22,6 +22,8 @@ export function ProductCard({ product }: { product: Product }) {
               src={product.image}
               alt={product.name}
               fill
+              sizes="(max-width: 768px) 50vw, 25vw"
+              quality={85}
               className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
               onError={() => setImgError(true)}
             />
