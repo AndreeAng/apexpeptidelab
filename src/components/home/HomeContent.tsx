@@ -18,6 +18,10 @@ import {
   Microscope,
   Atom,
   ArrowRight,
+  Star,
+  MapPin,
+  Clock,
+  Sparkles,
 } from "lucide-react";
 
 type Props = {
@@ -87,6 +91,36 @@ export default function HomeContent({ products }: Props) {
                 Nuestra calidad
               </Link>
             </motion.div>
+
+            {/* Mini social proof */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              className="flex items-center gap-4 mt-8 pt-6 border-t border-white/5"
+            >
+              <div className="flex -space-x-2">
+                {["#009bdb", "#c03689", "#cb6120", "#e6b54a"].map((c, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-full border-2 border-navy flex items-center justify-center text-[10px] font-bold text-white"
+                    style={{ backgroundColor: c }}
+                  >
+                    {["TB", "GL", "GH", "CJ"][i]}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={11} className="text-lime fill-lime" />
+                  ))}
+                </div>
+                <p className="text-white/40 text-[11px] mt-0.5">
+                  4 compuestos · Pureza verificada
+                </p>
+              </div>
+            </motion.div>
           </div>
 
           {/* Hero visual — product showcase */}
@@ -98,17 +132,14 @@ export default function HomeContent({ products }: Props) {
             aria-hidden="true"
           >
             <div className="relative w-[340px] h-[420px]">
-              {/* Glow background */}
               <div className="absolute inset-0 rounded-3xl overflow-hidden">
                 <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-product-glow/8 blur-3xl" />
                 <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-product-cjc/8 blur-3xl" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-lime/5 blur-2xl" />
               </div>
 
-              {/* Product vial cards stacked */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-full h-full">
-                  {/* Back card — CJC */}
                   <motion.div
                     initial={{ opacity: 0, rotate: 0 }}
                     animate={{ opacity: 0.7, rotate: 6 }}
@@ -124,7 +155,6 @@ export default function HomeContent({ products }: Props) {
                     <div className="text-white/40 text-[8px] text-center mt-2 italic">5mg/5mg</div>
                   </motion.div>
 
-                  {/* Middle card — GHK-Cu */}
                   <motion.div
                     initial={{ opacity: 0, rotate: 0 }}
                     animate={{ opacity: 0.8, rotate: -3 }}
@@ -140,7 +170,6 @@ export default function HomeContent({ products }: Props) {
                     <div className="text-white/40 text-[8px] text-center mt-2 italic">50mg</div>
                   </motion.div>
 
-                  {/* Front card — Glow (main) */}
                   <motion.div
                     initial={{ opacity: 0, y: 30, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -161,7 +190,6 @@ export default function HomeContent({ products }: Props) {
                     </div>
                   </motion.div>
 
-                  {/* GLP-3 floating */}
                   <motion.div
                     initial={{ opacity: 0, rotate: 0 }}
                     animate={{ opacity: 0.7, rotate: 3 }}
@@ -247,46 +275,50 @@ export default function HomeContent({ products }: Props) {
         </div>
       </section>
 
-      {/* Quality pillars */}
+      {/* How it works — 3-step process */}
       <section className="bg-navy-deep border-y border-lime/10">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-14 md:py-20">
-          <FadeIn className="text-center mb-10">
+          <FadeIn className="text-center mb-12">
             <div className="text-lime text-[11px] tracking-widest uppercase font-medium mb-2">
-              Garantía
+              Proceso
             </div>
             <h2 className="text-white text-2xl md:text-3xl font-medium tracking-tight">
-              Calidad verificable
+              Compra simple, entrega segura
             </h2>
           </FadeIn>
-          <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {[
               {
-                icon: BadgeCheck,
-                title: "Pureza verificada",
-                text: "Cada lote es analizado por laboratorio independiente para confirmar identidad y pureza superior al 99%.",
+                step: "01",
+                icon: Sparkles,
+                title: "Elige tus compuestos",
+                text: "Explora nuestro catálogo con péptidos de 99%+ de pureza. Agrega al carrito lo que necesites.",
               },
               {
-                icon: Package,
-                title: "Protección de envío",
-                text: "Embalaje especializado con protección térmica y discreción total. Envío seguro a todas las ciudades de Bolivia.",
+                step: "02",
+                icon: Clock,
+                title: "Confirma por WhatsApp",
+                text: "Completa el checkout y coordinamos pago y envío directamente por WhatsApp. Atención personalizada.",
               },
               {
-                icon: FileCheck,
-                title: "CoA en cada lote",
-                text: "Certificado de análisis disponible para cada producto, documentando pureza, identidad y condiciones de almacenamiento.",
+                step: "03",
+                icon: Truck,
+                title: "Recibe en 24-48h",
+                text: "Envío seguro con embalaje térmico y discreto a cualquier ciudad de Bolivia.",
               },
-            ].map((pillar) => (
-              <FadeInStaggerItem key={pillar.title}>
-                <div className="bg-surface-raised border border-border-subtle rounded-xl p-6 hover:border-lime/30 transition-colors duration-300 h-full">
-                  <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center mb-4">
-                    <pillar.icon size={20} className="text-lime" />
+            ].map((item) => (
+              <FadeInStaggerItem key={item.step}>
+                <div className="relative bg-surface-raised border border-border-subtle rounded-xl p-6 hover:border-lime/25 transition-colors duration-300 h-full">
+                  <span className="absolute -top-3 -left-1 text-lime/10 text-5xl font-bold font-mono select-none">
+                    {item.step}
+                  </span>
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center mb-4">
+                      <item.icon size={20} className="text-lime" />
+                    </div>
+                    <h3 className="text-white text-sm font-medium mb-2">{item.title}</h3>
+                    <p className="text-white/50 text-xs leading-relaxed">{item.text}</p>
                   </div>
-                  <h3 className="text-white text-sm font-medium mb-2">
-                    {pillar.title}
-                  </h3>
-                  <p className="text-white/50 text-xs leading-relaxed">
-                    {pillar.text}
-                  </p>
                 </div>
               </FadeInStaggerItem>
             ))}
@@ -294,7 +326,93 @@ export default function HomeContent({ products }: Props) {
         </div>
       </section>
 
-      {/* Why apex — redesigned as alternating layout */}
+      {/* Quality pillars */}
+      <section className="max-w-7xl mx-auto px-5 md:px-8 py-14 md:py-20">
+        <FadeIn className="text-center mb-10">
+          <div className="text-lime text-[11px] tracking-widest uppercase font-medium mb-2">
+            Garantía
+          </div>
+          <h2 className="text-white text-2xl md:text-3xl font-medium tracking-tight">
+            Calidad verificable
+          </h2>
+        </FadeIn>
+        <FadeInStagger className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          {[
+            {
+              icon: BadgeCheck,
+              title: "Pureza verificada",
+              text: "Cada lote es analizado por laboratorio independiente para confirmar identidad y pureza superior al 99%.",
+            },
+            {
+              icon: Package,
+              title: "Protección de envío",
+              text: "Embalaje especializado con protección térmica y discreción total. Envío seguro a todas las ciudades de Bolivia.",
+            },
+            {
+              icon: FileCheck,
+              title: "CoA en cada lote",
+              text: "Certificado de análisis disponible para cada producto, documentando pureza, identidad y condiciones de almacenamiento.",
+            },
+          ].map((pillar) => (
+            <FadeInStaggerItem key={pillar.title}>
+              <div className="bg-surface-raised border border-border-subtle rounded-xl p-6 hover:border-lime/30 transition-colors duration-300 h-full">
+                <div className="w-10 h-10 rounded-lg bg-lime/10 flex items-center justify-center mb-4">
+                  <pillar.icon size={20} className="text-lime" />
+                </div>
+                <h3 className="text-white text-sm font-medium mb-2">
+                  {pillar.title}
+                </h3>
+                <p className="text-white/50 text-xs leading-relaxed">
+                  {pillar.text}
+                </p>
+              </div>
+            </FadeInStaggerItem>
+          ))}
+        </FadeInStagger>
+      </section>
+
+      {/* Shipping coverage — SEO cities */}
+      <section className="bg-navy-deep border-y border-lime/10">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 py-14 md:py-20">
+          <FadeIn className="text-center mb-10">
+            <div className="text-lime text-[11px] tracking-widest uppercase font-medium mb-2">
+              Cobertura
+            </div>
+            <h2 className="text-white text-2xl md:text-3xl font-medium tracking-tight">
+              Envíos a toda Bolivia
+            </h2>
+            <p className="text-white/45 text-sm mt-3 max-w-lg mx-auto">
+              Entrega segura con embalaje térmico en 24-48 horas a todas las capitales de departamento.
+            </p>
+          </FadeIn>
+          <FadeInStagger className="grid grid-cols-3 md:grid-cols-5 gap-3" stagger={0.04}>
+            {[
+              { city: "Santa Cruz", flag: "SCZ" },
+              { city: "La Paz", flag: "LPZ" },
+              { city: "Cochabamba", flag: "CBB" },
+              { city: "Sucre", flag: "SRE" },
+              { city: "Oruro", flag: "ORU" },
+              { city: "Potosí", flag: "POT" },
+              { city: "Tarija", flag: "TJA" },
+              { city: "Trinidad", flag: "TDD" },
+              { city: "Cobija", flag: "CIJ" },
+              { city: "El Alto", flag: "EAT" },
+            ].map((item) => (
+              <FadeInStaggerItem key={item.city}>
+                <div className="bg-surface-raised border border-border-subtle rounded-lg p-3.5 text-center hover:border-lime/25 transition-colors duration-300 group">
+                  <div className="w-8 h-8 rounded-full bg-lime/8 flex items-center justify-center mx-auto mb-2 group-hover:bg-lime/15 transition-colors">
+                    <MapPin size={14} className="text-lime/60" />
+                  </div>
+                  <p className="text-white text-xs font-medium">{item.city}</p>
+                  <p className="text-white/30 text-[10px] font-mono mt-0.5">{item.flag}</p>
+                </div>
+              </FadeInStaggerItem>
+            ))}
+          </FadeInStagger>
+        </div>
+      </section>
+
+      {/* Why apex */}
       <section className="max-w-7xl mx-auto px-5 md:px-8 py-14 md:py-20">
         <FadeIn className="text-center mb-10">
           <h2 className="text-white text-2xl md:text-3xl font-medium tracking-tight">
@@ -352,7 +470,6 @@ export default function HomeContent({ products }: Props) {
       <section className="max-w-7xl mx-auto px-5 md:px-8 py-14 md:py-20">
         <ScaleIn>
           <div className="relative overflow-hidden bg-surface-raised border border-border-default rounded-2xl p-8 md:p-14 text-center">
-            {/* Decorative glow */}
             <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-lime/5 blur-3xl pointer-events-none" />
             <div className="absolute -bottom-20 -left-20 w-56 h-56 rounded-full bg-product-glow/5 blur-3xl pointer-events-none" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-lime/[0.02] blur-3xl pointer-events-none" />
@@ -365,13 +482,23 @@ export default function HomeContent({ products }: Props) {
                 Péptidos de grado farmacéutico con documentación completa y envío
                 seguro a toda Bolivia.
               </p>
-              <Link
-                href="/productos"
-                className="group bg-lime text-navy px-8 py-3.5 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-lime/20 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer active:scale-[0.97]"
-              >
-                Ver catálogo
-                <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  href="/productos"
+                  className="group bg-lime text-navy px-8 py-3.5 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-lime/20 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.97]"
+                >
+                  Ver catálogo
+                  <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+                <a
+                  href="https://wa.me/59172201700?text=Hola%2C%20me%20interesa%20informaci%C3%B3n%20sobre%20los%20p%C3%A9ptidos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border border-white/15 text-white/70 px-8 py-3.5 rounded-full text-sm font-medium hover:border-white/30 hover:text-white hover:bg-white/5 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  Escribir por WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </ScaleIn>
