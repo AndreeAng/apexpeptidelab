@@ -47,7 +47,7 @@ export default function ContactPage() {
     if (result.ok) setSent(true);
   };
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "591TUNUMERO";
+  const whatsappNumber = "59172201700";
 
   return (
     <div className="min-h-screen">
@@ -76,7 +76,7 @@ export default function ContactPage() {
                 primary
               >
                 <a
-                  href={`https://wa.me/${whatsappNumber}`}
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hola, me contacto desde la web de Apex Peptide Lab. Me gustaría recibir información sobre sus péptidos de investigación.")}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-whatsapp hover:bg-whatsapp-hover text-white px-5 py-2.5 rounded-full text-sm font-medium inline-flex items-center gap-2 transition-colors cursor-pointer active:scale-[0.97] mt-2"
