@@ -99,22 +99,18 @@ export function CuentaContent({ profile, orders, userEmail }: Props) {
         </div>
 
         {/* Quick stats */}
-        <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-white/5">
+        <div className="grid grid-cols-2 gap-3 mt-5 pt-5 border-t border-white/5">
           <div className="text-center">
             <p className="text-lg font-semibold text-white">{orders.length}</p>
             <p className="text-[11px] text-white/40">Pedidos</p>
           </div>
           <div className="text-center">
             <p className="text-lg font-semibold text-white">
-              {((profile?.addresses as unknown[]) ?? []).length}
+              {orders.length > 0
+                ? new Date(orders[0].created_at).toLocaleDateString("es-BO", { day: "numeric", month: "short" })
+                : "—"}
             </p>
-            <p className="text-[11px] text-white/40">Direcciones</p>
-          </div>
-          <div className="text-center">
-            <p className="text-lg font-semibold text-lime">
-              Bs {formatBs(orders.reduce((sum, o) => sum + o.total, 0))}
-            </p>
-            <p className="text-[11px] text-white/40">Total comprado</p>
+            <p className="text-[11px] text-white/40">Último pedido</p>
           </div>
         </div>
       </div>
