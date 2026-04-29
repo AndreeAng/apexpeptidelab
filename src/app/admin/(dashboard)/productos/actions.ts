@@ -2,6 +2,7 @@
 
 import { toggleStock, toggleOffer, deleteProduct, createProduct, updateProduct } from "@/lib/dal/products";
 import { uploadProductImage } from "@/lib/supabase/storage";
+import { revalidatePath } from "next/cache";
 import type { Product } from "@/data/products";
 
 export async function toggleStockAction(id: string, inStock: boolean) {
@@ -26,15 +27,21 @@ function parseJsonArray(value: string | null): unknown[] {
 }
 
 export async function createProductAction(data: FormData) {
+  const name = data.get("name") as string;
+  const priceBs = parseFloat(data.get("priceBs") as string);
+  if (!name || !name.trim()) return { success: false, error: "El nombre es obligatorio" };
+  if (!priceBs || priceBs <= 0) return { success: false, error: "El precio debe ser mayor a 0" };
+
   let imageUrl = "";
   const imageFile = data.get("image") as File | null;
   if (imageFile && imageFile.size > 0) {
-    const url = await uploadProductImage(imageFile);
-    if (url) imageUrl = url;
+    const result = await uploadProductImage(imageFile);
+    if ("error" in result) return { success: false, error: result.error };
+    imageUrl = result.url;
   }
 
   const productData: Partial<Product> = {
-    name: data.get("name") as string,
+    name,
     slug: data.get("slug") as string,
     shortName: data.get("shortName") as string,
     composition: data.get("composition") as string,
@@ -58,15 +65,24 @@ export async function createProductAction(data: FormData) {
   };
 
   const result = await createProduct(productData);
-  return result ? { success: true } : { success: false };
+  if (!result) return { success: false, error: "Error al crear el producto" };
+  revalidatePath("/admin/productos");
+  revalidatePath("/productos");
+  return { success: true };
 }
 
 export async function updateProductAction(id: string, data: FormData) {
+  const name = data.get("name") as string;
+  const priceBs = parseFloat(data.get("priceBs") as string);
+  if (!name || !name.trim()) return { success: false, error: "El nombre es obligatorio" };
+  if (!priceBs || priceBs <= 0) return { success: false, error: "El precio debe ser mayor a 0" };
+
   let imageUrl: string | undefined;
   const imageFile = data.get("image") as File | null;
   if (imageFile && imageFile.size > 0) {
-    const url = await uploadProductImage(imageFile);
-    if (url) imageUrl = url;
+    const result = await uploadProductImage(imageFile);
+    if ("error" in result) return { success: false, error: result.error };
+    imageUrl = result.url;
   }
 
   const productData: Partial<Product> = {
@@ -97,5 +113,8 @@ export async function updateProductAction(id: string, data: FormData) {
   }
 
   const result = await updateProduct(id, productData);
-  return result ? { success: true } : { success: false };
+  if (!result) return { success: false, error: "Error al actualizar el producto" };
+  revalidatePath("/admin/productos");
+  revalidatePath("/productos");
+  return { success: true };
 }

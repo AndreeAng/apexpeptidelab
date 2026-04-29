@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { Poppins, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { CartSidebar } from "@/components/cart/CartSidebar";
-import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { Analytics } from "@/components/layout/Analytics";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
+import { PublicShell } from "@/components/layout/PublicShell";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -109,13 +105,8 @@ export default function RootLayout({
         <WebSiteJsonLd />
       </head>
       <body className="min-h-screen bg-navy text-white flex flex-col">
-        <AnnouncementBar />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <CartSidebar />
+        <PublicShell>{children}</PublicShell>
         <Analytics />
-        <WhatsAppButton />
       </body>
     </html>
   );
