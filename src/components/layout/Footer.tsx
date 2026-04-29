@@ -170,9 +170,12 @@ export function Footer() {
                 </a>
               </div>
             </div>
-            <span className="text-white/25 text-[10px] italic">
+            <Link
+              href="/admin/login"
+              className="text-white/10 hover:text-white/25 text-[10px] italic transition-colors"
+            >
               Research use only
-            </span>
+            </Link>
           </div>
         </div>
       </div>
