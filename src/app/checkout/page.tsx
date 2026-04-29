@@ -122,28 +122,90 @@ export default function CheckoutPage() {
 
   if (orderResult) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center gap-5">
-        <div className="w-16 h-16 rounded-2xl bg-lime/10 flex items-center justify-center">
-          <CheckCircle size={28} className="text-lime" />
+      <div className="min-h-[60vh] flex items-center justify-center px-4 py-12">
+        <div className="max-w-md w-full">
+          {/* Success card */}
+          <div className="rounded-xl border border-lime/20 bg-navy-deep/50 overflow-hidden">
+            {/* Green header */}
+            <div className="bg-lime/10 border-b border-lime/15 px-6 py-5 text-center">
+              <div className="w-14 h-14 rounded-full bg-lime/20 flex items-center justify-center mx-auto mb-3">
+                <CheckCircle size={28} className="text-lime" />
+              </div>
+              <h2 className="text-white text-lg font-semibold">
+                ¡Pedido confirmado!
+              </h2>
+              <p className="text-white/45 text-sm mt-1">
+                Tu orden ha sido registrada exitosamente
+              </p>
+            </div>
+
+            {/* Order number */}
+            <div className="px-6 py-5 text-center border-b border-white/5">
+              <p className="text-white/40 text-[11px] uppercase tracking-widest font-medium mb-1">
+                Número de pedido
+              </p>
+              <p className="font-mono text-lime text-2xl font-bold">
+                {orderResult.orderNumber}
+              </p>
+            </div>
+
+            {/* Next steps */}
+            <div className="px-6 py-5 space-y-3">
+              <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-3">
+                Próximos pasos
+              </p>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-lime/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-lime text-[11px] font-bold">1</span>
+                </div>
+                <p className="text-white/60 text-sm">
+                  Se abrió WhatsApp con tu pedido. Si no se abrió,{" "}
+                  <a
+                    href={`https://wa.me/59172201700`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-lime hover:underline"
+                  >
+                    escríbenos aquí
+                  </a>
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-lime/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-lime text-[11px] font-bold">2</span>
+                </div>
+                <p className="text-white/60 text-sm">
+                  Confirmaremos tu pedido y coordinaremos el envío por WhatsApp
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-lime/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-lime text-[11px] font-bold">3</span>
+                </div>
+                <p className="text-white/60 text-sm">
+                  Recibirás tu pedido con embalaje discreto y protegido
+                </p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="px-6 pb-6 flex flex-col gap-2.5">
+              <Link
+                href="/productos"
+                className="w-full bg-lime text-navy-deep py-3 rounded-lg text-sm font-semibold hover:brightness-110 transition-all inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+              >
+                Seguir comprando
+                <ArrowRight size={14} />
+              </Link>
+              <Link
+                href="/cuenta"
+                className="w-full bg-white/5 border border-white/10 text-white/60 hover:text-white py-3 rounded-lg text-sm font-medium hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+              >
+                Ver mis pedidos
+              </Link>
+            </div>
+          </div>
         </div>
-        <div>
-          <p className="text-white text-lg font-medium mb-1">
-            Orden creada exitosamente
-          </p>
-          <p className="text-white/45 text-sm">
-            Tu numero de orden es
-          </p>
-          <p className="font-mono text-lime text-xl font-bold mt-1">
-            {orderResult.orderNumber}
-          </p>
-        </div>
-        <Link
-          href="/productos"
-          className="bg-lime text-navy px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-opacity inline-flex items-center gap-2 cursor-pointer active:scale-[0.97]"
-        >
-          Seguir comprando
-          <ArrowRight size={14} />
-        </Link>
       </div>
     );
   }

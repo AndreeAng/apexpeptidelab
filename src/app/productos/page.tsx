@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getPublicProducts } from "@/lib/dal/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ShieldCheck, Truck } from "lucide-react";
@@ -9,8 +10,24 @@ export const metadata = {
     "Péptidos con 99%+ de pureza. Certificado de análisis en cada lote.",
 };
 
-export default async function CatalogPage() {
+export default async function CatalogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const products = await getPublicProducts();
+  const { categoria } = await searchParams;
+
+  const activeCategory =
+    typeof categoria === "string" ? categoria : undefined;
+
+  const categories = Array.from(
+    new Set(products.map((p) => p.category).filter(Boolean))
+  );
+
+  const filtered = activeCategory
+    ? products.filter((p) => p.category === activeCategory)
+    : products;
 
   return (
     <div className="min-h-screen">
@@ -30,10 +47,41 @@ export default async function CatalogPage() {
         </FadeIn>
       </header>
 
+      {/* Category filters */}
+      <div className="px-5 md:px-8 lg:px-12 pt-8 pb-2 max-w-7xl mx-auto">
+        <FadeIn delay={0.05}>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/productos"
+              className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-medium border transition-colors duration-200 ${
+                !activeCategory
+                  ? "bg-lime/15 text-lime border-lime/30"
+                  : "text-white/50 border-white/10 hover:border-white/20"
+              }`}
+            >
+              Todos
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/productos?categoria=${encodeURIComponent(cat)}`}
+                className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-medium border transition-colors duration-200 ${
+                  activeCategory === cat
+                    ? "bg-lime/15 text-lime border-lime/30"
+                    : "text-white/50 border-white/10 hover:border-white/20"
+                }`}
+              >
+                {cat}
+              </Link>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
+
       {/* Product grid */}
       <div className="px-5 md:px-8 lg:px-12 py-10 md:py-14 max-w-7xl mx-auto">
         <FadeInStagger className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {products.map((p) => (
+          {filtered.map((p) => (
             <FadeInStaggerItem key={p.slug}>
               <ProductCard product={p} />
             </FadeInStaggerItem>

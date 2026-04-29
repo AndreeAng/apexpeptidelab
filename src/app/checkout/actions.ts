@@ -4,6 +4,7 @@ import { createOrder } from "@/lib/dal/orders";
 import type { OrderItem } from "@/lib/supabase/types";
 import { createClient } from "@/lib/supabase/server";
 import { sendAdminNewOrderEmail, sendCustomerConfirmationEmail } from "@/lib/email";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function createOrderAction(formData: {
   nombre: string;
@@ -18,6 +19,10 @@ export async function createOrderAction(formData: {
   discount: number;
   total: number;
 }) {
+  // Rate limit: max 5 orders per 10 minutes
+  const rl = rateLimit("checkout", 5, 10 * 60 * 1000);
+  if (!rl.ok) return { ok: false as const, error: "Demasiados pedidos. Intenta en unos minutos." };
+
   const supabase = await createClient();
   const {
     data: { user },

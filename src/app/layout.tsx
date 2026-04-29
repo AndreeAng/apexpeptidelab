@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartSidebar } from "@/components/cart/CartSidebar";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { Analytics } from "@/components/layout/Analytics";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CartSidebar />
+        <Analytics />
         <WhatsAppButton />
       </body>
     </html>
