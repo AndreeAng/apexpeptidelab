@@ -1,0 +1,27 @@
+export type Product = {
+  id?: string;
+  slug: string;
+  name: string;
+  shortName: string;
+  composition: string;
+  doseLabel: string;
+  category: string;
+  accentColor: string;
+  description: string;
+  longDescription?: string;
+  research: string[];
+  benefits: { icon: string; title: string; text: string }[];
+  purity: string;
+  vialNote: string;
+  priceBs: number;
+  image: string;
+  inStock: boolean;
+  isOffer?: boolean;
+  offerPriceBs?: number;
+  sortOrder?: number;
+  faqs: { q: string; a: string }[];
+  specs: { label: string; value: string }[];
+  storage: string;
+  reconstitution?: string;
+  highlights: string[];
+};

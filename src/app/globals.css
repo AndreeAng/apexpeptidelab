@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Base — from physical labels */
+  --color-navy: #002852;
+  --color-navy-deep: #001a3a;
+  --color-lime: #b8ca60;
+  --color-lime-soft: rgba(184, 202, 96, 0.12);
+
+  /* Product accent colors */
+  --color-product-glow: #009bdb;
+  --color-product-glp3: #c03689;
+  --color-product-ghk: #cb6120;
+  --color-product-cjc: #e6b54a;
+
+  /* WhatsApp */
+  --color-whatsapp: #25D366;
+  --color-whatsapp-hover: #1fbf5a;
+
+  /* Surfaces */
+  --color-surface-raised: rgba(0, 0, 0, 0.18);
+  --color-surface-deep: rgba(0, 0, 0, 0.25);
+
+  /* Borders */
+  --color-border-subtle: rgba(184, 202, 96, 0.15);
+  --color-border-default: rgba(184, 202, 96, 0.25);
+  --color-border-strong: rgba(184, 202, 96, 0.5);
+
+  /* Fonts */
+  --font-sans: var(--font-poppins), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  /* Easing — Emil Kowalski philosophy */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base styles */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-navy);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection */
+::selection {
+  background-color: rgba(184, 202, 96, 0.3);
+  color: #ffffff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(184, 202, 96, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(184, 202, 96, 0.4);
+}
+
+/* Checkout form inputs */
+.checkout-input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 0.5px solid rgba(184, 202, 96, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px 10px 38px;
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  width: 100%;
+  transition: border-color 200ms;
+}
+.checkout-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.checkout-input:focus {
+  outline: none;
+  border-color: rgba(184, 202, 96, 0.6);
+}
+
+/* Contact form inputs */
+.contact-input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 0.5px solid rgba(184, 202, 96, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  width: 100%;
+  transition: border-color 200ms;
+}
+.contact-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.contact-input:focus {
+  outline: none;
+  border-color: rgba(184, 202, 96, 0.6);
+}
+select.contact-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(184,202,96,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+select.contact-input option {
+  background: #002852;
+  color: white;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 2px;
+}
+
+/* Animated gradient for hero */
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Gradient text utility */
+.text-gradient-lime {
+  background: linear-gradient(135deg, var(--color-lime) 0%, rgba(184, 202, 96, 0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth page transitions */
+main {
+  animation: pageIn 0.35s ease-out;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main {
+    animation: none;
+  }
+}
+
+.hero-glow {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 155, 219, 0.08) 0%,
+    rgba(184, 202, 96, 0.06) 35%,
+    rgba(192, 54, 137, 0.06) 65%,
+    rgba(0, 155, 219, 0.08) 100%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 12s ease-in-out infinite;
 }
