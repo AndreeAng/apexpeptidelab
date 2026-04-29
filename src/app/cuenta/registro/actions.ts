@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function registerAction(formData: {
   email: string;
@@ -10,6 +11,9 @@ export async function registerAction(formData: {
   lastName: string;
   phone?: string;
 }) {
+  const rl = rateLimit(`register:${formData.email}`, 3, 15 * 60 * 1000);
+  if (!rl.ok) return { ok: false as const, error: "Demasiados intentos. Espera unos minutos." };
+
   const supabase = await createClient();
 
   const { data, error } = await supabase.auth.signUp({

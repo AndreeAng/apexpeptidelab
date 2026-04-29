@@ -77,6 +77,7 @@ export function ProductCard({ product }: { product: Product }) {
             e.preventDefault();
             addItem(product);
           }}
+          aria-label={`Agregar ${product.name} al carrito`}
           className="w-full bg-lime/10 hover:bg-lime hover:text-navy text-lime text-xs font-medium py-2.5 rounded-full border border-lime/25 hover:border-lime transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.97]"
         >
           <ShoppingBag size={13} />

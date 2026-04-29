@@ -277,8 +277,9 @@ export default function CheckoutPage() {
         clear();
         setOrderResult({ orderNumber: result.orderNumber });
       }
-    } catch {
-      // silently handle
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Hubo un error al procesar tu pedido. Intenta de nuevo.");
     } finally {
       setSubmitting(false);
     }

@@ -23,7 +23,7 @@ export const metadata = {
 export default function BlogPage() {
   return (
     <div className="min-h-screen">
-      <header className="pt-4 pb-10">
+      <header className="pb-10">
         <FadeIn>
           <div className="text-lime text-[11px] tracking-widest uppercase font-medium mb-3">
             Blog
