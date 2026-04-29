@@ -5,9 +5,12 @@ import { ShieldCheck, Truck } from "lucide-react";
 import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/ui/AnimateIn";
 
 export const metadata = {
-  title: "Catálogo — apex peptide lab",
+  title: "Catálogo de Péptidos de Investigación Bolivia",
   description:
-    "Péptidos con 99%+ de pureza. Certificado de análisis en cada lote.",
+    "Comprar péptidos de investigación en Bolivia. BPC-157, GHK-Cu, CJC-1295, Retatrutide, Wolverine y más. Pureza 99%+, certificado de análisis. Envío a Santa Cruz, La Paz, Cochabamba y todo el país.",
+  alternates: {
+    canonical: "https://www.apexpeptidelab.shop/productos",
+  },
 };
 
 export default async function CatalogPage({

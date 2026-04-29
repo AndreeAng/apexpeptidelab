@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getProductBySlug, getPublicProducts } from "@/lib/dal/products";
 import { ProductDetail } from "./ProductDetail";
+import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -14,8 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(slug);
   if (!product) return {};
 
-  const title = `${product.name} — apex peptide lab`;
-  const description = product.description || `${product.name} — péptido de investigación con ${product.purity} de pureza.`;
+  const title = `${product.name} — Comprar en Bolivia | Apex Peptide Lab`;
+  const description = product.description || `${product.name} — péptido de investigación con ${product.purity} de pureza. Envío a Santa Cruz, La Paz, Cochabamba y toda Bolivia.`;
   const url = `https://www.apexpeptidelab.shop/productos/${product.slug}`;
 
   return {
@@ -47,5 +48,17 @@ export default async function ProductPage({ params }: Props) {
   const allProducts = await getPublicProducts();
   const related = allProducts.filter((p) => p.slug !== product.slug).slice(0, 3);
 
-  return <ProductDetail product={product} related={related} />;
+  return (
+    <>
+      <ProductJsonLd product={product} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Inicio", url: "https://www.apexpeptidelab.shop" },
+          { name: "Productos", url: "https://www.apexpeptidelab.shop/productos" },
+          { name: product.name, url: `https://www.apexpeptidelab.shop/productos/${product.slug}` },
+        ]}
+      />
+      <ProductDetail product={product} related={related} />
+    </>
+  );
 }

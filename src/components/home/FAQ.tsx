@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: "¿Realizan envíos a todo Bolivia?",
-    a: "Sí, realizamos envíos seguros y discretos a todas las ciudades de Bolivia. El tiempo de entrega es generalmente de 24-48 horas una vez confirmado el pedido.",
+    a: "Sí, realizamos envíos seguros y discretos a todas las ciudades de Bolivia: Santa Cruz, La Paz, Cochabamba, Sucre, Oruro, Potosí, Tarija, Trinidad y Cobija. El tiempo de entrega es generalmente de 24-48 horas una vez confirmado el pedido.",
   },
   {
     q: "¿Cómo funciona el proceso de compra?",

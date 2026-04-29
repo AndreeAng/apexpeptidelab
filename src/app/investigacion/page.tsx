@@ -3,8 +3,12 @@ import { Atom, BookOpen, FlaskConical, Microscope, ArrowRight } from "lucide-rea
 import { FadeIn, FadeInStagger, FadeInStaggerItem, ScaleIn } from "@/components/ui/AnimateIn";
 
 export const metadata = {
-  title: "Investigación — apex peptide lab",
-  description: "Recursos y contexto científico sobre péptidos.",
+  title: "Investigación Científica con Péptidos en Bolivia",
+  description:
+    "Información científica sobre péptidos de investigación: BPC-157, GHK-Cu, CJC-1295, Retatrutide. Contexto científico, estudios y aplicaciones en laboratorio. Recursos para investigadores en Bolivia.",
+  alternates: {
+    canonical: "https://www.apexpeptidelab.shop/investigacion",
+  },
 };
 
 export default function InvestigacionPage() {

@@ -12,8 +12,12 @@ import {
 import { FadeIn, FadeInStagger, FadeInStaggerItem, ScaleIn } from "@/components/ui/AnimateIn";
 
 export const metadata = {
-  title: "Calidad — apex peptide lab",
-  description: "Nuestro compromiso con la pureza y calidad de cada péptido.",
+  title: "Calidad y Pureza de Péptidos — Certificado de Análisis",
+  description:
+    "Péptidos con pureza superior al 99% verificada por laboratorio independiente. Certificado de análisis (CoA) en cada lote. Protección de envío y almacenamiento garantizado en Bolivia.",
+  alternates: {
+    canonical: "https://www.apexpeptidelab.shop/calidad",
+  },
 };
 
 export default function CalidadPage() {
