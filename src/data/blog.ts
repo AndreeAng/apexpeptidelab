@@ -126,7 +126,7 @@ export const blogArticles: BlogArticle[] = [
     date: "2026-03-28",
     readTime: "8 min",
     category: "Péptidos",
-    relatedProducts: ["cjc-ipa"],
+    relatedProducts: ["cjc-1295-ipamorelin"],
     content: `
 <h2>¿Qué son los secretagogos de GH?</h2>
 <p>Los secretagogos de la hormona de crecimiento (GH) son compuestos que estimulan la glándula pituitaria para que produzca y libere hormona de crecimiento de forma natural. A diferencia de la administración exógena de GH sintética, los secretagogos respetan los mecanismos de retroalimentación del organismo, produciendo una liberación más fisiológica y pulsátil.</p>
@@ -190,7 +190,7 @@ export const blogArticles: BlogArticle[] = [
     date: "2026-03-20",
     readTime: "6 min",
     category: "Guías",
-    relatedProducts: ["glow", "ghk-cu", "cjc-ipa"],
+    relatedProducts: ["glow", "ghk-cu", "cjc-1295-ipamorelin"],
     content: `
 <h2>¿Por qué es importante almacenar correctamente los péptidos?</h2>
 <p>Los péptidos de investigación son moléculas delicadas. Su estructura tridimensional, que es lo que les confiere actividad biológica, puede degradarse fácilmente si no se manejan de forma adecuada. Un péptido degradado no solo pierde eficacia, sino que puede generar resultados experimentales inconsistentes o directamente inválidos.</p>
@@ -267,7 +267,7 @@ export const blogArticles: BlogArticle[] = [
     date: "2026-03-12",
     readTime: "6 min",
     category: "Calidad",
-    relatedProducts: ["glow", "ghk-cu", "cjc-ipa"],
+    relatedProducts: ["glow", "ghk-cu", "cjc-1295-ipamorelin"],
     content: `
 <h2>¿Qué es un Certificado de Análisis?</h2>
 <p>Un Certificado de Análisis (CoA, por sus siglas en inglés: Certificate of Analysis) es un documento técnico emitido por un laboratorio que certifica la calidad, pureza e identidad de un producto. En el mundo de los péptidos de investigación, el CoA es el equivalente a un "pasaporte de calidad" que acompaña a cada lote producido.</p>
@@ -345,7 +345,7 @@ export const blogArticles: BlogArticle[] = [
     date: "2026-03-05",
     readTime: "9 min",
     category: "Guías",
-    relatedProducts: ["glow", "ghk-cu", "cjc-ipa"],
+    relatedProducts: ["glow", "ghk-cu", "cjc-1295-ipamorelin"],
     content: `
 <h2>El panorama de los péptidos de investigación en Bolivia</h2>
 <p>Bolivia está experimentando un crecimiento significativo en el área de investigación biomédica y bioquímica. Universidades en La Paz, Santa Cruz de la Sierra, Cochabamba y Sucre están expandiendo sus programas de investigación, y con ello, la demanda de reactivos de calidad, incluyendo péptidos de investigación.</p>
