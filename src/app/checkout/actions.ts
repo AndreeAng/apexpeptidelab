@@ -3,6 +3,7 @@
 import { createOrder } from "@/lib/dal/orders";
 import type { OrderItem } from "@/lib/supabase/types";
 import { createClient } from "@/lib/supabase/server";
+import { sendAdminNewOrderEmail, sendCustomerConfirmationEmail } from "@/lib/email";
 
 export async function createOrderAction(formData: {
   nombre: string;
@@ -37,6 +38,28 @@ export async function createOrderAction(formData: {
   });
 
   if (!result) return { ok: false as const, error: "Error al crear la orden" };
+
+  // Send email notifications (fire-and-forget, don't block checkout)
+  const emailData = {
+    orderNumber: result.orderNumber,
+    customerName: `${formData.nombre} ${formData.apellido}`,
+    customerPhone: formData.whatsapp,
+    customerCity: formData.ciudad,
+    customerAddress: formData.direccion,
+    items: formData.items,
+    subtotal: formData.subtotal,
+    discount: formData.discount,
+    couponCode: formData.couponCode,
+    total: formData.total,
+  };
+
+  // Admin notification
+  sendAdminNewOrderEmail(emailData).catch(() => {});
+
+  // Customer confirmation (only if logged in with email)
+  if (user?.email) {
+    sendCustomerConfirmationEmail(user.email, emailData).catch(() => {});
+  }
 
   return {
     ok: true as const,
