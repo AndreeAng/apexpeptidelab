@@ -1,9 +1,13 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const FROM = process.env.RESEND_FROM_EMAIL || "noreply@apexpeptidelab.com";
 const ADMIN_EMAIL = process.env.RESEND_TO_EMAIL || "";
+
+function getResend(): Resend | null {
+  const key = process.env.RESEND_API_KEY;
+  if (!key || key === "re_xxxxxxxxxxxx") return null;
+  return new Resend(key);
+}
 
 interface OrderEmailData {
   orderNumber: string;
@@ -20,7 +24,8 @@ interface OrderEmailData {
 
 /** Notify admin of a new order */
 export async function sendAdminNewOrderEmail(data: OrderEmailData) {
-  if (!ADMIN_EMAIL || !process.env.RESEND_API_KEY) return;
+  const resend = getResend();
+  if (!resend || !ADMIN_EMAIL) return;
 
   const itemRows = data.items
     .map(
@@ -117,7 +122,8 @@ export async function sendCustomerConfirmationEmail(
   customerEmail: string,
   data: OrderEmailData,
 ) {
-  if (!process.env.RESEND_API_KEY) return;
+  const resend = getResend();
+  if (!resend) return;
 
   const itemList = data.items
     .map((i) => `<li style="padding:4px 0;color:#c8d0dc;font-size:13px;">${i.name} × ${i.quantity} — Bs ${i.priceTotal.toFixed(2)}</li>`)
