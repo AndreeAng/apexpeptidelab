@@ -60,6 +60,14 @@ export function Footer() {
                   Blog
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/nosotros"
+                  className="text-white/55 hover:text-lime text-sm transition-colors duration-200"
+                >
+                  Nosotros
+                </Link>
+              </li>
             </ul>
           </div>
 

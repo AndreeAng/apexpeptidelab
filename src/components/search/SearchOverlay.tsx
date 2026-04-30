@@ -6,7 +6,8 @@ import type { Product } from "@/data/products";
 import { createClient } from "@/lib/supabase/client";
 import { dbProductToProduct } from "@/lib/supabase/types";
 import type { DbProduct } from "@/lib/supabase/types";
-import { Search, X } from "lucide-react";
+import { blogArticles, type BlogArticle } from "@/data/blog";
+import { Search, X, FileText } from "lucide-react";
 import Link from "next/link";
 import { formatBs } from "@/lib/format";
 
@@ -60,10 +61,28 @@ export function SearchOverlay({ open, onClose }: Props) {
     [products],
   );
 
+  const blogFuse = useMemo(
+    () =>
+      new Fuse(blogArticles, {
+        keys: [
+          { name: "title", weight: 2 },
+          { name: "excerpt", weight: 1.5 },
+          { name: "category", weight: 1 },
+        ],
+        threshold: 0.4,
+      }),
+    [],
+  );
+
   const results = useMemo(() => {
     if (query.length < 2) return [];
     return fuse.search(query).slice(0, 6);
   }, [query, fuse]);
+
+  const blogResults = useMemo(() => {
+    if (query.length < 2) return [] as ReturnType<typeof blogFuse.search>;
+    return blogFuse.search(query).slice(0, 3);
+  }, [query, blogFuse]);
 
   const handleClose = useCallback(() => {
     setQuery("");
@@ -128,38 +147,69 @@ export function SearchOverlay({ open, onClose }: Props) {
           </div>
         )}
 
-        {query.length >= 2 && results.length === 0 && (
+        {query.length >= 2 && results.length === 0 && blogResults.length === 0 && (
           <p className="mt-8 text-white/50 text-sm">
             Sin resultados para &ldquo;{query}&rdquo;.
           </p>
         )}
 
         {results.length > 0 && (
-          <div className="mt-6 space-y-2">
-            {results.map(({ item }) => (
-              <Link
-                key={item.slug}
-                href={`/productos/${item.slug}`}
-                onClick={handleClose}
-                className="flex items-center gap-4 p-3 bg-white/5 hover:bg-white/[0.08] border border-lime/15 rounded-lg transition-colors cursor-pointer"
-              >
-                <div
-                  className="w-2 h-8 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: item.accentColor }}
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="text-white font-medium text-sm truncate">
-                    {item.name}
+          <div className="mt-6">
+            <p className="text-white/40 text-[11px] uppercase tracking-wider font-medium mb-2">Productos</p>
+            <div className="space-y-2">
+              {results.map(({ item }) => (
+                <Link
+                  key={item.slug}
+                  href={`/productos/${item.slug}`}
+                  onClick={handleClose}
+                  className="flex items-center gap-4 p-3 bg-white/5 hover:bg-white/[0.08] border border-lime/15 rounded-lg transition-colors cursor-pointer"
+                >
+                  <div
+                    className="w-2 h-8 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: item.accentColor }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-white font-medium text-sm truncate">
+                      {item.name}
+                    </div>
+                    <div className="text-white/55 text-xs truncate">
+                      {item.category} · {item.composition}
+                    </div>
                   </div>
-                  <div className="text-white/55 text-xs truncate">
-                    {item.category} · {item.composition}
+                  <div className="text-lime font-mono text-sm flex-shrink-0">
+                    Bs {formatBs(item.priceBs)}
                   </div>
-                </div>
-                <div className="text-lime font-mono text-sm flex-shrink-0">
-                  Bs {formatBs(item.priceBs)}
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {blogResults.length > 0 && (
+          <div className="mt-6">
+            <p className="text-white/40 text-[11px] uppercase tracking-wider font-medium mb-2">Artículos</p>
+            <div className="space-y-2">
+              {blogResults.map(({ item }) => (
+                <Link
+                  key={item.slug}
+                  href={`/blog/${item.slug}`}
+                  onClick={handleClose}
+                  className="flex items-center gap-4 p-3 bg-white/5 hover:bg-white/[0.08] border border-lime/15 rounded-lg transition-colors cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-lime/10 flex items-center justify-center flex-shrink-0">
+                    <FileText size={14} className="text-lime/60" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-white font-medium text-sm truncate">
+                      {item.title}
+                    </div>
+                    <div className="text-white/55 text-xs truncate">
+                      {item.category} · {item.readTime}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </div>

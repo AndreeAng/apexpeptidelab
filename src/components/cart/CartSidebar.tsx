@@ -2,8 +2,9 @@
 
 import { useCart } from "@/store/cart";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, ShoppingBag, Minus, Plus, Trash2 } from "lucide-react";
+import { X, ShoppingBag, Minus, Plus, Trash2, FlaskConical } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { formatBs } from "@/lib/format";
 import { useEffect } from "react";
 
@@ -97,11 +98,20 @@ export function CartSidebar() {
                       key={product.slug}
                       className="flex gap-3 p-3 bg-black/20 border border-lime/10 rounded-lg group"
                     >
-                      {/* Accent bar */}
-                      <div
-                        className="w-1.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: product.accentColor }}
-                      />
+                      {/* Product thumbnail */}
+                      <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-navy-deep flex items-center justify-center border border-white/5">
+                        {product.image ? (
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            width={56}
+                            height={56}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <FlaskConical size={20} style={{ color: product.accentColor }} />
+                        )}
+                      </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
