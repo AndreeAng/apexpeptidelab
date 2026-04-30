@@ -62,7 +62,7 @@ export function buildWhatsAppMessage({
     `*TOTAL: Bs ${formatBs(total)}*`,
     `────────────────────`,
     ``,
-    `_apexpeptidelab.com_`,
+    `_apexpeptidelab.shop_`,
   ];
 
   return lines.filter((l) => l !== null).join("\n");

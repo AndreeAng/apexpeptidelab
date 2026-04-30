@@ -33,12 +33,12 @@ export async function sendContactMessage(formData: FormData) {
     if (process.env.RESEND_API_KEY && process.env.RESEND_TO_EMAIL) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: `Apex Peptide Lab <${process.env.RESEND_FROM_EMAIL || "noreply@apexpeptidelab.com"}>`,
+        from: `Apex Peptide Lab <${process.env.RESEND_FROM_EMAIL || "noreply@apexpeptidelab.shop"}>`,
         to: process.env.RESEND_TO_EMAIL,
         replyTo: email,
         subject: `[Contacto · ${asuntoLabels[asunto]}] ${nombre} ${apellido}`,
         html: `<div style="font-family:system-ui;max-width:560px;margin:0 auto;background:#0f1f38;color:white;padding:24px;border-radius:12px;border:1px solid #1a2744;">
-          <div style="color:#b8ca60;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Nuevo mensaje · apexpeptidelab.com</div>
+          <div style="color:#b8ca60;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Nuevo mensaje · apexpeptidelab.shop</div>
           <h1 style="color:#b8ca60;font-size:22px;margin:0 0 16px;">${nombre} ${apellido}</h1>
           <table style="width:100%;font-size:14px;line-height:1.6;">
             <tr><td style="color:rgba(255,255,255,0.5);padding:4px 0;width:110px;">Email</td><td><a href="mailto:${email}" style="color:white;">${email}</a></td></tr>

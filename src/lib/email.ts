@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-const FROM = process.env.RESEND_FROM_EMAIL || "noreply@apexpeptidelab.com";
+const FROM = process.env.RESEND_FROM_EMAIL || "noreply@apexpeptidelab.shop";
 const ADMIN_EMAIL = process.env.RESEND_TO_EMAIL || "";
 
 function getResend(): Resend | null {

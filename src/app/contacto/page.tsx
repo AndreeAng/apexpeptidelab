@@ -88,7 +88,7 @@ export default function ContactPage() {
 
               <ContactItem icon={<Mail size={16} />} label="Email">
                 <span className="text-white/70 text-sm">
-                  contacto@apexpeptidelab.com
+                  contacto@apexpeptidelab.shop
                 </span>
               </ContactItem>
 
