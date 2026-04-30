@@ -183,7 +183,7 @@ export default function CheckoutPage() {
                   <span className="text-lime text-[11px] font-bold">3</span>
                 </div>
                 <p className="text-white/60 text-sm">
-                  Recibirás tu pedido con embalaje discreto y protegido
+                  Recibirás tu pedido protegido y respetando la cadena de frío
                 </p>
               </div>
             </div>
