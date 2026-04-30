@@ -25,7 +25,11 @@ interface OrderEmailData {
 /** Notify admin of a new order */
 export async function sendAdminNewOrderEmail(data: OrderEmailData) {
   const resend = getResend();
-  if (!resend || !ADMIN_EMAIL) return;
+  console.log("[Email] Attempting to send admin email. Resend:", !!resend, "ADMIN_EMAIL:", ADMIN_EMAIL, "FROM:", FROM, "API_KEY starts with:", process.env.RESEND_API_KEY?.slice(0, 8));
+  if (!resend || !ADMIN_EMAIL) {
+    console.log("[Email] Skipped — resend:", !!resend, "adminEmail:", !!ADMIN_EMAIL);
+    return;
+  }
 
   const itemRows = data.items
     .map(
@@ -106,14 +110,15 @@ export async function sendAdminNewOrderEmail(data: OrderEmailData) {
   `;
 
   try {
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: `Apex Peptide Lab <${FROM}>`,
       to: ADMIN_EMAIL,
       subject: `Nuevo pedido ${data.orderNumber} — Bs ${data.total.toFixed(2)}`,
       html,
     });
+    console.log("[Email] Send result:", JSON.stringify(result));
   } catch (err) {
-    console.error("Failed to send admin email:", err);
+    console.error("[Email] Failed to send admin email:", err);
   }
 }
 
