@@ -88,14 +88,6 @@ export async function createOrderAction(formData: {
     console.error("Admin email failed:", e);
   }
 
-  if (user?.email) {
-    try {
-      await sendCustomerConfirmationEmail(user.email, emailData);
-    } catch (e) {
-      console.error("Customer email failed:", e);
-    }
-  }
-
   return {
     ok: true as const,
     orderNumber: result.orderNumber,
