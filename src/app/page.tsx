@@ -4,7 +4,7 @@ import { FAQJsonLd } from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Péptidos de investigación en Bolivia — Apex Peptide Lab",
+  title: "Péptidos de investigación en Bolivia",
   description:
     "Comprar péptidos de investigación en Bolivia. BPC-157, GHK-Cu, CJC-1295, Retatrutide y más. Pureza 99%+, certificado de análisis. Envío seguro a Santa Cruz, La Paz, Cochabamba, Sucre, Oruro, Potosí, Tarija y todo el país.",
   alternates: {

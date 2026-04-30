@@ -10,7 +10,7 @@ import { FadeIn, FadeInStagger, FadeInStaggerItem } from "@/components/ui/Animat
 import Link from "next/link";
 
 export const metadata = {
-  title: "Nosotros — Apex Peptide Lab",
+  title: "Nosotros",
   description:
     "Conoce a Apex Peptide Lab: péptidos de investigación de grado farmacéutico en Bolivia. Nuestra misión, valores y compromiso con la calidad.",
   alternates: {
