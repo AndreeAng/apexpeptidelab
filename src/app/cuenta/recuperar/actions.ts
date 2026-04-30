@@ -10,7 +10,7 @@ export async function resetPasswordAction(email: string) {
   const supabase = await createClient();
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://www.apexpeptidelab.shop/cuenta/login",
+    redirectTo: "https://www.apexpeptidelab.shop/cuenta/cambiar-password",
   });
 
   if (error) return { ok: false as const, error: "Error al enviar el enlace. Verifica tu email." };

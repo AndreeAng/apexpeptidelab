@@ -56,7 +56,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/cuenta") &&
     pathname !== "/cuenta/login" &&
     pathname !== "/cuenta/registro" &&
-    pathname !== "/cuenta/recuperar"
+    pathname !== "/cuenta/recuperar" &&
+    pathname !== "/cuenta/cambiar-password"
   ) {
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

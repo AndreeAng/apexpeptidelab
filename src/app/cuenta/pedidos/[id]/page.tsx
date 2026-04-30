@@ -97,7 +97,7 @@ export default async function OrderDetailPage({
             <div>
               <dt className="text-white/40">Fecha</dt>
               <dd className="text-white/80">
-                {new Date(order.created_at).toLocaleDateString("es-BO", {
+                {new Date(order.created_at).toLocaleString("es-BO", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",

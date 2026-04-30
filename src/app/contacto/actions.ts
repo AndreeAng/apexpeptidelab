@@ -21,7 +21,17 @@ export async function sendContactMessage(formData: FormData) {
   const rl = rateLimit(`contact:${data.data.email}`, 3, 10 * 60 * 1000);
   if (!rl.ok) return { ok: false, error: "Demasiados mensajes. Intenta en unos minutos." };
 
-  const { nombre, apellido, email, whatsapp, asunto, mensaje } = data.data;
+  function esc(s: string) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  const raw = data.data;
+  const nombre = esc(raw.nombre);
+  const apellido = esc(raw.apellido);
+  const email = esc(raw.email);
+  const whatsapp = raw.whatsapp ? esc(raw.whatsapp) : "";
+  const asunto = raw.asunto;
+  const mensaje = esc(raw.mensaje);
   const asuntoLabels: Record<string, string> = {
     consulta: "Consulta general",
     b2b: "B2B / Mayoristas",
@@ -35,7 +45,7 @@ export async function sendContactMessage(formData: FormData) {
       await resend.emails.send({
         from: `Apex Peptide Lab <${process.env.RESEND_FROM_EMAIL || "noreply@apexpeptidelab.shop"}>`,
         to: process.env.RESEND_TO_EMAIL,
-        replyTo: email,
+        replyTo: raw.email,
         subject: `[Contacto · ${asuntoLabels[asunto]}] ${nombre} ${apellido}`,
         html: `<div style="font-family:system-ui;max-width:560px;margin:0 auto;background:#0f1f38;color:white;padding:24px;border-radius:12px;border:1px solid #1a2744;">
           <div style="color:#b8ca60;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Nuevo mensaje · apexpeptidelab.shop</div>
