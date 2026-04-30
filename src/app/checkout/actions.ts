@@ -4,7 +4,7 @@ import { createOrder } from "@/lib/dal/orders";
 import { incrementCouponUsage } from "@/lib/dal/coupons";
 import type { OrderItem } from "@/lib/supabase/types";
 import { createClient } from "@/lib/supabase/server";
-import { sendAdminNewOrderEmail, sendCustomerConfirmationEmail } from "@/lib/email";
+import { sendAdminNewOrderEmail } from "@/lib/email";
 import { rateLimit } from "@/lib/rate-limit";
 
 export async function createOrderAction(formData: {
@@ -73,6 +73,7 @@ export async function createOrderAction(formData: {
     orderNumber: result.orderNumber,
     customerName: `${formData.nombre} ${formData.apellido}`,
     customerPhone: formData.whatsapp,
+    customerCi: formData.ci,
     customerCity: formData.ciudad,
     customerAddress: formData.direccion,
     items: formData.items,
