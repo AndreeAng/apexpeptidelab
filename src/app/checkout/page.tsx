@@ -240,16 +240,32 @@ export default function CheckoutPage() {
 
   const onSubmit = async (data: CheckoutForm) => {
     setSubmitting(true);
-    try {
-      const orderItems: OrderItem[] = items.map(({ product, quantity }) => ({
-        productId: product.id ?? product.slug,
-        name: product.name,
-        doseLabel: product.doseLabel,
-        quantity,
-        priceUnit: product.priceBs,
-        priceTotal: product.priceBs * quantity,
-      }));
 
+    const orderItems: OrderItem[] = items.map(({ product, quantity }) => ({
+      productId: product.id ?? product.slug,
+      name: product.name,
+      doseLabel: product.doseLabel,
+      quantity,
+      priceUnit: product.priceBs,
+      priceTotal: product.priceBs * quantity,
+    }));
+
+    // Build WhatsApp message BEFORE the async call so we can open it immediately
+    const message = buildWhatsAppMessage({
+      customer: data,
+      items,
+      total,
+      discount,
+      couponCode: appliedCoupon?.code,
+      subtotal: subtotal(),
+    });
+    const whatsappUrl = `https://wa.me/59172201700?text=${encodeURIComponent(message)}`;
+
+    // Open WhatsApp immediately (before await) so iOS doesn't block it
+    window.location.href = whatsappUrl;
+
+    // Create order in background
+    try {
       const result = await createOrderAction({
         nombre: data.nombre,
         apellido: data.apellido,
@@ -265,26 +281,14 @@ export default function CheckoutPage() {
       });
 
       if (result.ok) {
-        const message = buildWhatsAppMessage({
-          customer: data,
-          items,
-          total,
-          orderNumber: result.orderNumber,
-          discount,
-          couponCode: appliedCoupon?.code,
-          subtotal: subtotal(),
-        });
-        const url = `https://wa.me/59172201700?text=${encodeURIComponent(message)}`;
-
         clear();
-        setOrderResult({ orderNumber: result.orderNumber, whatsappUrl: url });
+        setOrderResult({ orderNumber: result.orderNumber, whatsappUrl });
       } else {
-        alert(result.error || "Hubo un error al procesar tu pedido. Intenta de nuevo.");
+        setSubmitting(false);
+        alert(result.error || "Hubo un error al registrar tu pedido.");
       }
     } catch (err) {
       console.error("Checkout error:", err);
-      alert("Hubo un error al procesar tu pedido. Intenta de nuevo.");
-    } finally {
       setSubmitting(false);
     }
   };
