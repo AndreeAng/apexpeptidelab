@@ -252,21 +252,7 @@ export default function CheckoutPage() {
       priceTotal: product.priceBs * quantity,
     }));
 
-    // Build WhatsApp message BEFORE the async call so we can open it immediately
-    const message = buildWhatsAppMessage({
-      customer: data,
-      items,
-      total,
-      discount,
-      couponCode: appliedCoupon?.code,
-      subtotal: subtotal(),
-    });
-    const whatsappUrl = `https://wa.me/59172201700?text=${encodeURIComponent(message)}`;
-
-    // Open WhatsApp immediately (before await) so iOS doesn't block it
-    window.location.href = whatsappUrl;
-
-    // Create order in background
+    // Create order first (includes email sending)
     try {
       const result = await createOrderAction({
         nombre: data.nombre,
@@ -284,8 +270,23 @@ export default function CheckoutPage() {
       });
 
       if (result.ok) {
+        // Build WhatsApp message with order number
+        const message = buildWhatsAppMessage({
+          customer: data,
+          items,
+          total,
+          orderNumber: result.orderNumber,
+          discount,
+          couponCode: appliedCoupon?.code,
+          subtotal: subtotal(),
+        });
+        const whatsappUrl = `https://wa.me/59172201700?text=${encodeURIComponent(message)}`;
+
         clear();
         setOrderResult({ orderNumber: result.orderNumber, whatsappUrl });
+
+        // Open WhatsApp after state is set
+        window.location.href = whatsappUrl;
       } else {
         setSubmitting(false);
         alert(result.error || "Hubo un error al registrar tu pedido.");
@@ -293,6 +294,7 @@ export default function CheckoutPage() {
     } catch (err) {
       console.error("Checkout error:", err);
       setSubmitting(false);
+      alert("Hubo un error al procesar tu pedido. Intenta de nuevo.");
     }
   };
 

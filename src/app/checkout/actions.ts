@@ -68,7 +68,7 @@ export async function createOrderAction(formData: {
     incrementCouponUsage(formData.couponCode).catch(() => {});
   }
 
-  // Send email notifications (fire-and-forget)
+  // Send email notifications (await so they complete before response)
   const emailData = {
     orderNumber: result.orderNumber,
     customerName: `${formData.nombre} ${formData.apellido}`,
@@ -82,10 +82,18 @@ export async function createOrderAction(formData: {
     total,
   };
 
-  sendAdminNewOrderEmail(emailData).catch(() => {});
+  try {
+    await sendAdminNewOrderEmail(emailData);
+  } catch (e) {
+    console.error("Admin email failed:", e);
+  }
 
   if (user?.email) {
-    sendCustomerConfirmationEmail(user.email, emailData).catch(() => {});
+    try {
+      await sendCustomerConfirmationEmail(user.email, emailData);
+    } catch (e) {
+      console.error("Customer email failed:", e);
+    }
   }
 
   return {
