@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { rateLimit } from "@/lib/rate-limit";
 
 export async function adminLoginAction(formData: {

@@ -285,8 +285,10 @@ export default function CheckoutPage() {
         clear();
         setOrderResult({ orderNumber: result.orderNumber, whatsappUrl });
 
-        // Open WhatsApp after state is set
-        window.location.href = whatsappUrl;
+        // Open WhatsApp in new tab so success screen stays visible
+        setTimeout(() => {
+          window.open(whatsappUrl, "_blank");
+        }, 300);
       } else {
         setSubmitting(false);
         alert(result.error || "Hubo un error al registrar tu pedido.");
