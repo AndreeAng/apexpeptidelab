@@ -50,6 +50,7 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [orderResult, setOrderResult] = useState<{
     orderNumber: string;
+    whatsappUrl: string;
   } | null>(null);
 
   const {
@@ -149,8 +150,24 @@ export default function CheckoutPage() {
               </p>
             </div>
 
+            {/* WhatsApp CTA */}
+            <div className="px-6 py-5">
+              <a
+                href={orderResult.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-green-500 hover:bg-green-600 text-white py-3.5 rounded-lg text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 active:scale-[0.98]"
+              >
+                <MessageCircle size={18} />
+                Enviar pedido por WhatsApp
+              </a>
+              <p className="text-white/35 text-xs text-center mt-2">
+                Toca el botón para enviarnos tu pedido y coordinar el pago
+              </p>
+            </div>
+
             {/* Next steps */}
-            <div className="px-6 py-5 space-y-3">
+            <div className="px-6 py-5 border-t border-white/5 space-y-3">
               <p className="text-white/50 text-xs font-medium uppercase tracking-wider mb-3">
                 Próximos pasos
               </p>
@@ -159,15 +176,7 @@ export default function CheckoutPage() {
                   <span className="text-lime text-[11px] font-bold">1</span>
                 </div>
                 <p className="text-white/60 text-sm">
-                  Se abrió WhatsApp con tu pedido. Si no se abrió,{" "}
-                  <a
-                    href={`https://wa.me/59172201700`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-lime hover:underline"
-                  >
-                    escríbenos aquí
-                  </a>
+                  Toca el botón verde para enviarnos tu pedido por WhatsApp
                 </p>
               </div>
               <div className="flex items-start gap-3">
@@ -175,7 +184,7 @@ export default function CheckoutPage() {
                   <span className="text-lime text-[11px] font-bold">2</span>
                 </div>
                 <p className="text-white/60 text-sm">
-                  Confirmaremos tu pedido y coordinaremos el envío por WhatsApp
+                  Confirmaremos tu pedido y coordinaremos el envío
                 </p>
               </div>
               <div className="flex items-start gap-3">
@@ -196,12 +205,6 @@ export default function CheckoutPage() {
               >
                 Seguir comprando
                 <ArrowRight size={14} />
-              </Link>
-              <Link
-                href="/cuenta"
-                className="w-full bg-white/5 border border-white/10 text-white/60 hover:text-white py-3 rounded-lg text-sm font-medium hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
-              >
-                Ver mis pedidos
               </Link>
             </div>
           </div>
@@ -272,15 +275,9 @@ export default function CheckoutPage() {
           subtotal: subtotal(),
         });
         const url = `https://wa.me/59172201700?text=${encodeURIComponent(message)}`;
-        // Use location.href for iOS compatibility (window.open blocked by Safari)
-        const link = document.createElement("a");
-        link.href = url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.click();
 
         clear();
-        setOrderResult({ orderNumber: result.orderNumber });
+        setOrderResult({ orderNumber: result.orderNumber, whatsappUrl: url });
       } else {
         alert(result.error || "Hubo un error al procesar tu pedido. Intenta de nuevo.");
       }
