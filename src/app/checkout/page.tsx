@@ -272,7 +272,12 @@ export default function CheckoutPage() {
           subtotal: subtotal(),
         });
         const url = `https://wa.me/59172201700?text=${encodeURIComponent(message)}`;
-        window.open(url, "_blank");
+        // Use location.href for iOS compatibility (window.open blocked by Safari)
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.click();
 
         clear();
         setOrderResult({ orderNumber: result.orderNumber });
