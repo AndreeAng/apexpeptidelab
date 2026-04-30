@@ -76,7 +76,7 @@ export default function CheckoutPage() {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("name, last_name, phone, addresses")
+        .select("name, last_name, ci, phone, addresses")
         .eq("id", user.id)
         .single();
 
@@ -84,6 +84,7 @@ export default function CheckoutPage() {
 
       if (profile.name) setValue("nombre", profile.name, { shouldValidate: true });
       if (profile.last_name) setValue("apellido", profile.last_name, { shouldValidate: true });
+      if (profile.ci) setValue("ci", profile.ci, { shouldValidate: true });
       if (profile.phone) setValue("whatsapp", profile.phone, { shouldValidate: true });
 
       const addrs = (profile.addresses as { label: string; address: string; city: string }[]) ?? [];
@@ -270,6 +271,7 @@ export default function CheckoutPage() {
       const result = await createOrderAction({
         nombre: data.nombre,
         apellido: data.apellido,
+        ci: data.ci,
         whatsapp: data.whatsapp,
         direccion: data.direccion,
         ciudad: data.ciudad,

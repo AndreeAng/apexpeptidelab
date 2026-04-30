@@ -11,6 +11,7 @@ import {
   Plus,
   Trash2,
   CheckCircle,
+  FileText,
   Phone,
   Mail,
   Tag,
@@ -157,6 +158,7 @@ export function CuentaContent({ profile, orders, userEmail }: Props) {
 function ProfileTab({ profile, userEmail }: { profile: DbProfile | null; userEmail: string }) {
   const [name, setName] = useState(profile?.name ?? "");
   const [lastName, setLastName] = useState(profile?.last_name ?? "");
+  const [ci, setCi] = useState(profile?.ci ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [success, setSuccess] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -166,7 +168,7 @@ function ProfileTab({ profile, userEmail }: { profile: DbProfile | null; userEma
     e.preventDefault();
     setSuccess(false);
     startTransition(async () => {
-      const result = await updateProfileAction({ name, lastName, phone });
+      const result = await updateProfileAction({ name, lastName, ci, phone });
       if (result.ok) {
         setSuccess(true);
         router.refresh();
@@ -209,6 +211,21 @@ function ProfileTab({ profile, userEmail }: { profile: DbProfile | null; userEma
               />
             </div>
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-white/50">Carnet de identidad (CI)</label>
+          <div className="relative">
+            <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+            <input
+              type="text"
+              value={ci}
+              onChange={(e) => setCi(e.target.value)}
+              placeholder="12345678"
+              className="checkout-input"
+            />
+          </div>
+          <p className="text-white/25 text-[11px]">Requerido para encomiendas</p>
         </div>
 
         <div className="space-y-1.5">

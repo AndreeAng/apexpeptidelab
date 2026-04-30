@@ -10,6 +10,7 @@ import { rateLimit } from "@/lib/rate-limit";
 export async function createOrderAction(formData: {
   nombre: string;
   apellido: string;
+  ci: string;
   whatsapp: string;
   direccion: string;
   ciudad: string;
@@ -49,6 +50,7 @@ export async function createOrderAction(formData: {
     userId: user?.id,
     customerName: `${formData.nombre} ${formData.apellido}`,
     customerPhone: formData.whatsapp,
+    customerCi: formData.ci,
     customerAddress: formData.direccion,
     customerCity: formData.ciudad,
     notes: formData.notas,

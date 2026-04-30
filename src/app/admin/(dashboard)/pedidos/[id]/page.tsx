@@ -140,6 +140,12 @@ export default async function OrderDetailPage({
                 <span className="text-white/40">Nombre:</span>{" "}
                 <span className="text-white">{order.customer_name}</span>
               </div>
+              {order.customer_ci && (
+                <div>
+                  <span className="text-white/40">CI:</span>{" "}
+                  <span className="text-white">{order.customer_ci}</span>
+                </div>
+              )}
               <div>
                 <span className="text-white/40">Tel&eacute;fono:</span>{" "}
                 <span className="text-white">{order.customer_phone}</span>

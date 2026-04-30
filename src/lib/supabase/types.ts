@@ -36,6 +36,7 @@ export interface DbOrder {
   user_id: string | null;
   customer_name: string;
   customer_phone: string;
+  customer_ci: string | null;
   customer_address: string | null;
   customer_city: string | null;
   notes: string | null;
@@ -68,6 +69,7 @@ export interface DbProfile {
   name: string | null;
   last_name: string | null;
   phone: string | null;
+  ci: string | null;
   email: string | null;
   addresses: unknown[];
   created_at: string;

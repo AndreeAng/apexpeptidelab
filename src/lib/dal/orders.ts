@@ -6,6 +6,7 @@ export async function createOrder(data: {
   userId?: string;
   customerName: string;
   customerPhone: string;
+  customerCi?: string;
   customerAddress: string;
   customerCity: string;
   notes?: string;
@@ -32,6 +33,7 @@ export async function createOrder(data: {
         user_id: data.userId ?? null,
         customer_name: data.customerName,
         customer_phone: data.customerPhone,
+        customer_ci: data.customerCi ?? null,
         customer_address: data.customerAddress,
         customer_city: data.customerCity,
         notes: data.notes ?? null,

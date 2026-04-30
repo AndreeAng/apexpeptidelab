@@ -19,7 +19,7 @@ export async function getProfile(userId: string): Promise<DbProfile | null> {
 
 export async function updateProfile(
   userId: string,
-  data: { name?: string; last_name?: string; phone?: string | null; email?: string },
+  data: { name?: string; last_name?: string; ci?: string | null; phone?: string | null; email?: string },
 ): Promise<boolean> {
   try {
     const supabase = await createClient();
