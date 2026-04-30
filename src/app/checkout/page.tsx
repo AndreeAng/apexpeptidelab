@@ -27,6 +27,7 @@ import { createClient } from "@/lib/supabase/client";
 const checkoutSchema = z.object({
   nombre: z.string().min(2, "Ingresa tu nombre"),
   apellido: z.string().min(2, "Ingresa tu apellido"),
+  ci: z.string().min(5, "Ingresa tu número de CI"),
   whatsapp: z.string().min(7, "Numero invalido"),
   direccion: z.string().min(5, "Ingresa la direccion"),
   ciudad: z.string().min(2, "Ingresa la ciudad"),
@@ -495,6 +496,22 @@ export default function CheckoutPage() {
               </FormField>
 
               <FormField
+                label="Carnet de identidad (CI)"
+                required
+                id="checkout-ci"
+                icon={<FileText size={13} className="text-white/30" />}
+                error={errors.ci?.message}
+                helper="Requerido por la empresa de encomiendas para el envío"
+              >
+                <input
+                  {...register("ci")}
+                  id="checkout-ci"
+                  placeholder="Ej: 12345678"
+                  className="checkout-input"
+                />
+              </FormField>
+
+              <FormField
                 label="WhatsApp"
                 required
                 id="checkout-whatsapp"
@@ -584,6 +601,7 @@ function FormField({
   required,
   icon,
   error,
+  helper,
   id,
   children,
 }: {
@@ -591,6 +609,7 @@ function FormField({
   required?: boolean;
   icon?: React.ReactNode;
   error?: string;
+  helper?: string;
   id?: string;
   children: React.ReactNode;
 }) {
@@ -611,6 +630,9 @@ function FormField({
         )}
         {children}
       </div>
+      {helper && !error && (
+        <p className="text-white/30 text-[11px] mt-1">{helper}</p>
+      )}
       {error && (
         <p className="text-red-400 text-[11px] mt-1" role="alert">
           {error}

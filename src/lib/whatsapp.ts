@@ -4,6 +4,7 @@ import { formatBs } from "./format";
 type CustomerData = {
   nombre: string;
   apellido: string;
+  ci?: string;
   whatsapp: string;
   direccion: string;
   ciudad: string;
@@ -38,6 +39,7 @@ export function buildWhatsAppMessage({
     ``,
     `*DATOS DEL CLIENTE*`,
     `Nombre: ${customer.nombre} ${customer.apellido}`,
+    customer.ci ? `CI: ${customer.ci}` : null,
     `Tel: ${customer.whatsapp}`,
     `Ciudad: ${customer.ciudad}`,
     `Dirección: ${customer.direccion}`,
