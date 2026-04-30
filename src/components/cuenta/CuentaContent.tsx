@@ -15,6 +15,7 @@ import {
   Phone,
   Mail,
   Tag,
+  Lock,
   ChevronRight,
   Package,
   Home,
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 import type { DbProfile, DbOrder } from "@/lib/supabase/types";
 import { updateProfileAction, updateAddressesAction, logoutAction } from "@/app/cuenta/actions";
+import { changePasswordAction } from "@/app/cuenta/cambiar-password/actions";
 import { formatBs } from "@/lib/format";
 import Link from "next/link";
 
@@ -271,6 +273,89 @@ function ProfileTab({ profile, userEmail }: { profile: DbProfile | null; userEma
           {success && (
             <span className="flex items-center gap-1.5 text-green-400 text-sm animate-fade-in">
               <CheckCircle className="w-4 h-4" /> Guardado
+            </span>
+          )}
+        </div>
+      </form>
+
+      {/* Change password */}
+      <ChangePasswordSection />
+    </div>
+  );
+}
+
+function ChangePasswordSection() {
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setSuccess(false);
+    if (password.length < 6) { setError("Mínimo 6 caracteres"); return; }
+    if (password !== confirm) { setError("Las contraseñas no coinciden"); return; }
+
+    startTransition(async () => {
+      const result = await changePasswordAction(password);
+      if (result.ok) {
+        setSuccess(true);
+        setPassword("");
+        setConfirm("");
+        setTimeout(() => setSuccess(false), 3000);
+      } else {
+        setError(result.error);
+      }
+    });
+  }
+
+  return (
+    <div className="rounded-xl border border-lime/10 bg-navy-deep/30 p-5 md:p-6 mt-6">
+      <h2 className="text-sm font-medium text-white/70 mb-5">Cambiar contraseña</h2>
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-white/50">Nueva contraseña</label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mínimo 6 caracteres"
+              className="checkout-input"
+              minLength={6}
+            />
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-white/50">Confirmar contraseña</label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/25" />
+            <input
+              type="password"
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              placeholder="Repite la contraseña"
+              className="checkout-input"
+            />
+          </div>
+        </div>
+        {error && <p className="text-red-400 text-xs">{error}</p>}
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="px-5 py-2 rounded-lg bg-white/10 text-white text-sm font-medium
+              hover:bg-white/15 transition-all disabled:opacity-50 flex items-center gap-2"
+          >
+            {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+            Cambiar contraseña
+          </button>
+          {success && (
+            <span className="flex items-center gap-1.5 text-green-400 text-xs">
+              <CheckCircle className="w-3.5 h-3.5" /> Contraseña actualizada
             </span>
           )}
         </div>

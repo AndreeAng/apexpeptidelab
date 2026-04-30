@@ -17,12 +17,12 @@ export default function NotFound() {
 
         {/* Heading */}
         <h1 className="text-white text-2xl md:text-3xl font-medium mb-3">
-          Pagina no encontrada
+          Página no encontrada
         </h1>
 
         {/* Subtext */}
         <p className="text-white/50 text-sm md:text-base leading-relaxed mb-8">
-          El compuesto que buscas no esta en nuestro catalogo... aun.
+          El compuesto que buscas no está en nuestro catálogo... aún.
         </p>
 
         {/* Buttons */}

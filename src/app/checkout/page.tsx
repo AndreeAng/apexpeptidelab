@@ -223,7 +223,7 @@ export default function CheckoutPage() {
         </div>
         <div>
           <p className="text-white text-lg font-medium mb-1">
-            Tu carrito esta vacio
+            Tu carrito está vacío
           </p>
           <p className="text-white/45 text-sm">
             Agrega productos para continuar

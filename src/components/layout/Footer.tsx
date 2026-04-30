@@ -52,6 +52,14 @@ export function Footer() {
                   Calidad
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-white/55 hover:text-lime text-sm transition-colors duration-200"
+                >
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
 

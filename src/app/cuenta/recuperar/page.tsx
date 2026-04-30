@@ -1,39 +1,56 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { loginAction } from "./actions";
-import { Mail, Lock, AlertCircle, Loader2 } from "lucide-react";
+import { resetPasswordAction } from "./actions";
+import { Mail, AlertCircle, Loader2, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function RecuperarPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
 
     startTransition(async () => {
-      const result = await loginAction({ email, password });
-      if (result?.ok) {
-        router.push(result.redirect);
-      } else if (result) {
+      const result = await resetPasswordAction(email);
+      if (result.ok) {
+        setSent(true);
+      } else {
         setError(result.error);
       }
     });
+  }
+
+  if (sent) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-sm text-center">
+          <div className="w-14 h-14 rounded-full bg-lime/20 flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-7 h-7 text-lime" />
+          </div>
+          <h2 className="text-xl font-semibold text-white mb-2">Revisa tu email</h2>
+          <p className="text-white/50 text-sm mb-6">
+            Si existe una cuenta con <span className="text-white">{email}</span>, recibirás un enlace para restablecer tu contraseña.
+          </p>
+          <Link href="/cuenta/login" className="text-lime text-sm hover:underline">
+            Volver a iniciar sesión
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-white mb-1">Iniciar sesión</h1>
+          <h1 className="text-2xl font-semibold text-white mb-1">Recuperar contraseña</h1>
           <p className="text-white/40 text-sm">
-            Accede a tu cuenta para ver tus pedidos
+            Ingresa tu email y te enviaremos un enlace
           </p>
         </div>
 
@@ -67,31 +84,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="password" className="text-xs font-medium text-white/60">
-              Contraseña
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-              <input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="checkout-input"
-                autoComplete="current-password"
-              />
-            </div>
-          </div>
-
-          <div className="text-right">
-            <Link href="/cuenta/recuperar" className="text-xs text-white/30 hover:text-lime transition-colors">
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
-
           <button
             type="submit"
             disabled={isPending}
@@ -103,18 +95,17 @@ export default function LoginPage() {
             {isPending ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Ingresando...
+                Enviando...
               </>
             ) : (
-              "Ingresar"
+              "Enviar enlace"
             )}
           </button>
         </form>
 
         <p className="text-center text-white/40 text-sm mt-6">
-          ¿No tienes cuenta?{" "}
-          <Link href="/cuenta/registro" className="text-lime hover:underline">
-            Regístrate
+          <Link href="/cuenta/login" className="text-lime hover:underline">
+            Volver a iniciar sesión
           </Link>
         </p>
       </div>
